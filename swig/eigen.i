@@ -33,6 +33,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+ /*
+ Changes:
+ Robin Deits modified the typemaps to throw SWIG_fail when errors occur, which results in helpful Python errors being thrown when the type conversions fail, and added typemaps for std::vector containers. 
+ */
+
 %{
   #define SWIG_FILE_WITH_INIT
   #include "Eigen/Core"
