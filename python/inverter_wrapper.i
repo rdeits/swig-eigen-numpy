@@ -1,4 +1,4 @@
-%module(directors="1") inverter_wrapper
+%module inverter_wrapper
 
 %{
 #define SWIG_FILE_WITH_INIT
@@ -19,4 +19,3 @@
 
 %include "inverter.hpp"
 
-%feature("director") Inverter;
