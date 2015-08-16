@@ -216,7 +216,7 @@
 // ----------------------------------------------------------------------------
 // Macro to create the typemap for Eigen classes
 // ----------------------------------------------------------------------------
-%define %eigen_typemaps(CLASS)
+%define %eigen_typemaps(CLASS...)
 
 // Argout: const & (Disabled and prevents calling of the non-const typemap)
 %typemap(argout, fragment="Eigen_Fragments") const CLASS & ""
