@@ -225,14 +225,14 @@
 %typemap(argout, fragment="Eigen_Fragments") CLASS &
 {
   // Argout: &
-  if (!CopyFromEigenToNumPyMatrix<CLASS>($input, $1))
+  if (!CopyFromEigenToNumPyMatrix<CLASS >($input, $1))
     SWIG_fail;
 }
 
 // In: (nothing: no constness)
 %typemap(in, fragment="Eigen_Fragments") CLASS (CLASS temp)
 {
-  if (!ConvertFromNumpyToEigenMatrix<CLASS>(&temp, $input))
+  if (!ConvertFromNumpyToEigenMatrix<CLASS >(&temp, $input))
     SWIG_fail;
   $1 = temp;
 }
@@ -240,7 +240,7 @@
 %typemap(in, fragment="Eigen_Fragments") CLASS const& (CLASS temp)
 {
   // In: const&
-  if (!ConvertFromNumpyToEigenMatrix<CLASS>(&temp, $input))
+  if (!ConvertFromNumpyToEigenMatrix<CLASS >(&temp, $input))
     SWIG_fail;
   $1 = &temp;
 }
@@ -248,7 +248,7 @@
 %typemap(in, fragment="Eigen_Fragments") CLASS & (CLASS temp)
 {
   // In: non-const&
-  if (!ConvertFromNumpyToEigenMatrix<CLASS>(&temp, $input))
+  if (!ConvertFromNumpyToEigenMatrix<CLASS >(&temp, $input))
     SWIG_fail;
 
   $1 = &temp;
@@ -269,19 +269,19 @@
 // Out: (nothing: no constness)
 %typemap(out, fragment="Eigen_Fragments") CLASS
 {
-  if (!ConvertFromEigenToNumPyMatrix<CLASS>(&$result, &$1))
+  if (!ConvertFromEigenToNumPyMatrix<CLASS >(&$result, &$1))
     SWIG_fail;
 }
 // Out: const
 %typemap(out, fragment="Eigen_Fragments") CLASS const
 {
-  if (!ConvertFromEigenToNumPyMatrix<CLASS>(&$result, &$1))
+  if (!ConvertFromEigenToNumPyMatrix<CLASS >(&$result, &$1))
     SWIG_fail;
 }
 // Out: const&
 %typemap(out, fragment="Eigen_Fragments") CLASS const&
 {
-  if (!ConvertFromEigenToNumPyMatrix<CLASS>(&$result, $1))
+  if (!ConvertFromEigenToNumPyMatrix<CLASS >(&$result, $1))
     SWIG_fail;
 }
 // Out: & (not yet implemented)
@@ -303,7 +303,7 @@
   SWIG_fail;
 }
 
-%typemap(out, fragment="Eigen_Fragments") std::vector<CLASS>
+%typemap(out, fragment="Eigen_Fragments") std::vector<CLASS >
 {
   $result = PyList_New($1.size());
   if (!$result)
@@ -317,14 +317,22 @@
   }
 }
 
-%typemap(in, fragment="Eigen_Fragments") std::vector<CLASS>
+%typemap(in, fragment="Eigen_Fragments") std::vector<CLASS >
 {
   if (!PyList_Check($input))
     SWIG_fail;
   $1.resize(PyList_Size($input));
   for (size_t i=0; i != PyList_Size($input); ++i) {
-    if (!ConvertFromNumpyToEigenMatrix<CLASS>(&$1[i], PyList_GetItem($input, i)))
+    if (!ConvertFromNumpyToEigenMatrix<CLASS >(&$1[i], PyList_GetItem($input, i)))
       SWIG_fail;
   }
 }
+
+// %typemap(in, fragment="Eigen_Fragments") const Eigen::Ref<CLASS > & (CLASS temp)
+// {
+//   if (!ConvertFromNumpyToEigenMatrix<CLASS >(&temp, $input))
+//     SWIG_fail;
+//   new ($1) Eigen::Ref<CLASS >(temp);
+//   // $1->construct(temp);
+// }
 %enddef
