@@ -1,6 +1,7 @@
 #include <exception>
 #include <vector>
 #include <Eigen/Core>
+#include <Eigen/LU>
 
 class Inverter {
 public:
@@ -11,3 +12,7 @@ public:
   std::vector<Eigen::MatrixXd > getInverseList(std::vector<Eigen::MatrixXd > matrices);
 };
 
+template<typename Derived> 
+Eigen::Matrix<Derived, Eigen::Dynamic, Eigen::Dynamic> templatedInverse(const Eigen::Matrix<Derived, Eigen::Dynamic, Eigen::Dynamic> &M) {
+  return M.inverse();
+} 

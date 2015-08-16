@@ -16,6 +16,8 @@
 
 %eigen_typemaps(Eigen::VectorXd)
 %eigen_typemaps(Eigen::MatrixXd)
+%eigen_typemaps(Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>)
 
 %include "inverter.hpp"
 
+%template(templatedInverse_d) templatedInverse<double>;

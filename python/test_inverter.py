@@ -10,8 +10,11 @@ print inv.getInversePlus1(m)
 try:
     inv.getInverse("foo")
 except Exception as e:
-    print "Caught an expected error:", e
+    if e.message == "The given input is not known as a NumPy array or matrix.":
+        print "(successfully threw the expected error)"
+    else:
+        raise e
 
 print inv.getInverseList([np.eye(2), np.eye(3)])
 
-# print inv.getInverseEigenRef(np.eye(2))
+print pyinverter.templatedInverse(np.eye(2))

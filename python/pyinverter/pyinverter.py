@@ -1,4 +1,5 @@
 from inverter_wrapper import Inverter
+from inverter_wrapper import templatedInverse_d as templatedInverse
 import numpy as np
 
 def Inverter_getInversePlus1(self, M):

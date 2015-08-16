@@ -1,1 +1,1 @@
-from pyinverter import Inverter
+from pyinverter import Inverter, templatedInverse
