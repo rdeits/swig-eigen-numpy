@@ -316,4 +316,15 @@
       SWIG_fail;
   }
 }
+
+%typemap(in, fragment="Eigen_Fragments") std::vector<CLASS>
+{
+  if (!PyList_Check($input))
+    SWIG_fail;
+  $1.resize(PyList_Size($input));
+  for (size_t i=0; i != PyList_Size($input); ++i) {
+    if (!ConvertFromNumpyToEigenMatrix<CLASS>(&$1[i], PyList_GetItem($input, i)))
+      SWIG_fail;
+  }
+}
 %enddef
