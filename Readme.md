@@ -30,13 +30,23 @@ This project is entirely configured using CMake, so building should be pretty ea
 
 	mkdir build
 	cd build
-	cmake ..
+	cmake .. -DCMAKE_INSTALL_PREFIX=../install
 	make
 	make install
 
-Nothing should get installed into your system. The `make install` step just puts the python libraries inside the python package. 
+Nothing should get installed into your system; instead, the `inverter` library will get put in `install/lib/`. If you want to install globally, then you can just remove the `-DCMAKE_INSTALL_PREFIX=../install` argument. 
 
 ## Using the python bindings
+
+You'll need to make sure that the `inverter` shared library is accessible to your system at runtime. If you installed globally (without the `-DCMAKE_INSTALL_PREFIX=../install` argument), then you're all set. Otherweise, on OSX, you can do:
+
+	export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/path/to/wherever/you/put/swig-eigen-numpy/install/lib"
+
+Or on Linux:
+
+	export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/path/to/wherever/you/put/swig-eigen-numpy/install/lib"
+
+That will only affect the current instance of your terminal. To make that change permanent, put that line inside your `~/.bashrc` file. 
 
 The python bindings are demonstrated in `python/test_inverter.py`. To run it, just do:
 
