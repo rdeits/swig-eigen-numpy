@@ -1,5 +1,7 @@
 # Eigen to Numpy with Swig
 
+[![Build Status](https://travis-ci.org/rdeits/swig-eigen-numpy.svg)](https://travis-ci.org/rdeits/swig-eigen-numpy)
+
 ## Introduction
 
 This package exists as a demonstration of some of the tools I've been playing with to wrap C++ libraries which use Eigen Matrix types in Python (using numpy arrays). Specifically, it demonstrates:
