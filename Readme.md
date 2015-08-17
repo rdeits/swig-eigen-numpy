@@ -10,6 +10,7 @@ This package exists as a demonstration of some of the tools I've been playing wi
 * Passing numpy arrays to and from C++ methods which accept and return Eigen Matrix types
 * Adding additional Python-defined methods to a C++ class
 * Calling templated C++ functions from Python. 
+* Support for Python 2.7 and Python 3.4
 
 To show this off, I've written a C++ function which uses Eigen's LU module to invert matrices. This is a trivially simple example, but hopefully it will make someone's life a little easier down the road. 
 
@@ -53,3 +54,17 @@ The python bindings are demonstrated in `python/test_inverter.py`. To run it, ju
 	cd python
 	python test_inverter.py
 
+## Python 3 support
+
+This project should build and run correctly on Python 2 or Python 3. To change python versions, you can add another argument to cmake:
+
+	mkdir build
+	cd build
+	cmake .. -DCMAKE_INSTALL_PREFIX=../install -DPYTHON_EXECUTABLE=`which python3`
+	make
+	make install
+	cd ../python
+	python3 test_inverter.py
+
+In the above code I've told cmake to build with python3 instead of my default python2. 
+	
