@@ -54,6 +54,18 @@ The python bindings are demonstrated in `python/test_inverter.py`. To run it, ju
 	cd python
 	python test_inverter.py
 
+## Structure of this repo
+
+### `src`
+contains our c++ library, header, and a test executable
+
+### `python`
+contains the main swig interface file and our python source code
+
+### `swig` 
+contains general-purpose swig interface files for eigen and numpy. 
+
+
 ## Python 3 support
 
 This project should build and run correctly on Python 2 or Python 3. To change python versions, you can add another argument to cmake:
