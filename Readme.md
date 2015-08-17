@@ -17,9 +17,10 @@ You'll need, at the very least:
 
 * cmake
 * eigen3
+* swig
 * a c/c++ compiler for your system
 
-On OSX, you can follow the instructions from Homebrew to [install a compiler](https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md#requirements) and use [Homebrew](http://brew.sh/) to install the `cmake` and `eigen` packages. On Ubuntu, you can `sudo apt-get install libeigen3-dev cmake`. 
+On OSX, you can follow the instructions from Homebrew to [install a compiler](https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md#requirements) and use [Homebrew](http://brew.sh/) to install the `cmake swig eigen` packages. On Ubuntu, you can `sudo apt-get install libeigen3-dev cmake swig`. 
 
 ## Building
 
