@@ -1,0 +1,34 @@
+language: python
+
+sudo: false
+
+notifications:
+  email: false
+
+branches:
+  only:
+    - master
+    - stable
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - cmake
+      - libeigen3-dev
+
+python: 
+  - '2.7'
+  - '3.4'
+
+before_install:
+  - mkdir build
+  - cd build
+  - cmake ..
+
+script:
+  - make
+  - make install
+  - cd ../python
+  - python test_inverter.py
