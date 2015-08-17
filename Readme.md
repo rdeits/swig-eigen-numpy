@@ -6,7 +6,7 @@
 
 This package exists as a demonstration of some of the tools I've been playing with to wrap C++ libraries which use Eigen Matrix types in Python (using numpy arrays). Specifically, it demonstrates:
 
-* Wrapping a C++ class in a python class
+* Wrapping a C++ class in a Python class
 * Passing numpy arrays to and from C++ methods which accept and return Eigen Matrix types
 * Adding additional Python-defined methods to a C++ class
 * Calling templated C++ functions from Python. 
