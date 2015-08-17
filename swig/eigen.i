@@ -35,7 +35,10 @@
 
  /*
  Changes:
- Robin Deits modified the typemaps to throw SWIG_fail when errors occur, which results in helpful Python errors being thrown when the type conversions fail, and added typemaps for std::vector containers. 
+ Robin Deits:
+  * modified the typemaps to throw SWIG_fail when errors occur, which results in helpful Python errors being thrown when the type conversions fail
+  * added typemaps for std::vector containers
+  * updated to use the new numpy API for full python3 support
  */
 
 %{
