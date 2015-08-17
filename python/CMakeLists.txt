@@ -4,17 +4,20 @@
 
 # Find python and get its version number
 find_package(PythonInterp REQUIRED)
-execute_process(COMMAND
-    ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.version[:3])"
-    OUTPUT_VARIABLE PYVERSION)
+set(PYVERSION "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
 if(APPLE)
 	# Overload the PYTHON_INCLUDE_DIR and PYTHON_LIBRARY because, on OSX with a homebrew-provided python, cmake latches on to an old Apple-provided python install. 
-	execute_process(COMMAND python-config --prefix
+	execute_process(COMMAND python${PYTHON_VERSION_MAJOR}-config --prefix
 		OUTPUT_VARIABLE PYTHON_PREFIX
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 		)
-	set(PYTHON_INCLUDE_DIR ${PYTHON_PREFIX}/include/python${PYVERSION})
+	if (PYTHON_VERSION_MAJOR GREATER 2)
+		set(PYTHON_INCLUDE_DIR ${PYTHON_PREFIX}/include/python${PYVERSION}m)
+	else()
+		set(PYTHON_INCLUDE_DIR ${PYTHON_PREFIX}/include/python${PYVERSION})
+	endif()
+
 	set(PYTHON_LIBRARY ${PYTHON_PREFIX}/lib/libpython${PYVERSION}.dylib)
 	# These variable settings will affect the behavior of find_package(PythonLibs)
 endif()
@@ -32,8 +35,17 @@ find_package( PythonLibs REQUIRED )
 include_directories( ${PYTHON_INCLUDE_DIRS} )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../src )
 
-# Tell SWIG that we're compiling a c++ (not c) file
-set_source_files_properties(inverter_wrapper.i PROPERTIES CPLUSPLUS ON)
+# Tell SWIG that we're compiling a c++ (not c) file, and tell it to use python3 if appropriate. 
+if (PYTHON_VERSION_MAJOR GREATER 2)
+	set_source_files_properties(inverter_wrapper.i PROPERTIES
+		CPLUSPLUS ON
+		SWIG_FLAGS "-py3"
+		)
+else()
+	set_source_files_properties(inverter_wrapper.i PROPERTIES 
+		CPLUSPLUS ON)
+endif()
+
 # Tell swig to also look for interface (.i) files in ../swig/
 set(CMAKE_SWIG_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/../swig")
 

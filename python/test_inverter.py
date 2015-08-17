@@ -18,7 +18,7 @@ print(inv.getInversePlus1(m))
 try:
     inv.getInverse("foo")
 except Exception as e:
-    if e.message == "The given input is not known as a NumPy array or matrix.":
+    if str(e) == "The given input is not known as a NumPy array or matrix.":
         print("(successfully threw the expected error)")
     else:
         raise e
