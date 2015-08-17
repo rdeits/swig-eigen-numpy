@@ -16,6 +16,7 @@ addons:
     packages:
       - cmake
       - libeigen3-dev
+      - swig
 
 python: 
   - '2.7'
