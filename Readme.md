@@ -63,7 +63,10 @@ contains our c++ library, header, and a test executable
 contains the main swig interface file and our python source code
 
 ### `swig` 
-contains general-purpose swig interface files for eigen and numpy. 
+contains general-purpose swig interface files for eigen and numpy
+
+### `cmake`
+contains some helper scripts for cmake to find the eigen and numpy libraries
 
 
 ## Python 3 support
