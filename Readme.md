@@ -9,10 +9,10 @@ This package exists as a demonstration of some of the tools I've been playing wi
 * Wrapping a C++ class in a Python class
 * Passing numpy arrays to and from C++ methods which accept and return Eigen Matrix types
 * Adding additional Python-defined methods to a C++ class
-* Calling templated C++ functions from Python. 
+* Calling templated C++ functions from Python.
 * Support for Python 2.7 and Python 3.4
 
-To show this off, I've written a C++ function which uses Eigen's LU module to invert matrices. This is a trivially simple example, but hopefully it will make someone's life a little easier down the road. 
+To show this off, I've written a C++ function which uses Eigen's LU module to invert matrices. This is a trivially simple example, but hopefully it will make someone's life a little easier down the road.
 
 ## Requirements
 
@@ -23,7 +23,7 @@ You'll need, at the very least:
 * swig
 * a c/c++ compiler for your system
 
-On OSX, you can follow the instructions from Homebrew to [install a compiler](https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md#requirements) and use [Homebrew](http://brew.sh/) to install the `cmake swig eigen` packages. On Ubuntu, you can `sudo apt-get install libeigen3-dev cmake swig`. 
+On OSX, you can follow the instructions from Homebrew to [install a compiler](https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md#requirements) and use [Homebrew](http://brew.sh/) to install the `cmake swig eigen` packages. On Ubuntu, you can `sudo apt-get install libeigen3-dev cmake swig`.
 
 ## Building
 
@@ -35,7 +35,7 @@ This project is entirely configured using CMake, so building should be pretty ea
 	make
 	make install
 
-Nothing should get installed into your system; instead, the `inverter` library will get put in `install/lib/`. If you want to install globally, then you can just remove the `-DCMAKE_INSTALL_PREFIX=../install` argument. 
+Nothing should get installed into your system; instead, the `inverter` library will get put in `install/lib/`. If you want to install globally, then you can just remove the `-DCMAKE_INSTALL_PREFIX=../install` argument.
 
 ## Using the python bindings
 
@@ -47,7 +47,7 @@ Or on Linux:
 
 	export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/path/to/wherever/you/put/swig-eigen-numpy/install/lib"
 
-That will only affect the current instance of your terminal. To make that change permanent, put that line inside your `~/.bashrc` file. 
+That will only affect the current instance of your terminal. To make that change permanent, put that line inside your `~/.bashrc` file.
 
 The python bindings are demonstrated in `python/test_inverter.py`. To run it, just do:
 
@@ -62,10 +62,10 @@ contains our c++ library, header, and a test executable
 ### `python`
 contains the main swig interface file and our python source code
 
-### `swig` 
+### `swigmake/swig`
 contains general-purpose swig interface files for eigen and numpy
 
-### `cmake`
+### `swigmake/cmake`
 contains some helper scripts for cmake to find the eigen and numpy libraries
 
 
@@ -81,5 +81,5 @@ This project should build and run correctly on Python 2 or Python 3. To change p
 	cd ../python
 	python3 test_inverter.py
 
-In the above code I've told cmake to build with python3 instead of my default python2. 
-	
+In the above code I've told cmake to build with python3 instead of my default python2.
+
