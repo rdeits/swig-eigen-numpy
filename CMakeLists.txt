@@ -5,12 +5,11 @@ if(APPLE)
   cmake_policy(SET CMP0042 NEW)
 endif()
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/swigmake/cmake)
 
 find_package( Eigen3 )
 if (EIGEN3_FOUND)
   include_directories( ${EIGEN3_INCLUDE_DIR} )
-  message("EIGEN3_INCLUDE_DIR: " ${EIGEN3_INCLUDE_DIR})
 else()
   message(FATAL_ERROR "Could not find eigen, which is a required depedency")
 endif()
