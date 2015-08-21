@@ -5,6 +5,10 @@ Eigen::MatrixXd Inverter::getInverse(const Eigen::MatrixXd &M) {
   return M.inverse();
 }
 
+Eigen::MatrixXd Inverter::getInverse(const Eigen::MatrixXd &M, double offset) {
+  return M.inverse().array() + offset;
+}
+
 std::vector<Eigen::MatrixXd> Inverter::getInverseList(std::vector<Eigen::MatrixXd> matrices) {
   std::vector<Eigen::MatrixXd> result;
   result.reserve(matrices.size());
