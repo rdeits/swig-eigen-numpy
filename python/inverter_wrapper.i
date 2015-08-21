@@ -25,4 +25,3 @@
 
 // Create a specific instantiation of the templatedInverse function for arguments of type double, and call it templatedInverse_d. We'll import templatedInverse_d in pyinverter/pyinverter.py. 
 %template(templatedInverse_d) templatedInverse<double>;
-
