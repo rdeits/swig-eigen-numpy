@@ -17,6 +17,8 @@ print(inv.getInversePlus1(m))
 # Calling a function without passing a numpy array should raise a helpful error:
 try:
     inv.getInverse("foo")
+except NotImplementedError as e:
+    print("(successfully threw the expected error)")
 except Exception as e:
     if str(e) == "The given input is not known as a NumPy array or matrix.":
         print("(successfully threw the expected error)")
