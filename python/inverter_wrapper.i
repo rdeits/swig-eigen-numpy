@@ -10,9 +10,14 @@
 
 // typemaps.i is a built-in swig interface that lets us map c++ types to other types in our language of choice. We'll use it to map Eigen matrices to Numpy arrays. 
 %include <typemaps.i>
+%include <std_vector.i>
+
 
 // eigen.i is found in ../swig/ and contains specific definitions to convert Eigen matrices into Numpy arrays. 
 %include <eigen.i>
+
+%template(vectorMatrixXd) std::vector<Eigen::MatrixXd>;
+%template(vectorVectorXd) std::vector<Eigen::VectorXd>;
 
 // Since Eigen uses templates, we have to declare exactly which types we'd like to generate mappings for.
 %eigen_typemaps(Eigen::VectorXd)
@@ -25,3 +30,4 @@
 
 // Create a specific instantiation of the templatedInverse function for arguments of type double, and call it templatedInverse_d. We'll import templatedInverse_d in pyinverter/pyinverter.py. 
 %template(templatedInverse_d) templatedInverse<double>;
+

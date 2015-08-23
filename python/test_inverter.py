@@ -26,7 +26,10 @@ except Exception as e:
         raise e
 
 # In swig/eigen.i, we set up Python lists of numpy arrays to map to and from std::vectors of Eigen Matrices:
-print(inv.getInverseList([np.eye(2), np.eye(3)]))
+invs = inv.getInverseList([np.eye(2), np.eye(3)])
+print(invs)
+print(invs[0])
+print(invs[1])
 
 # templatedInverse is a templated function in C++, but we imported the explicit instantiation which acts on doubles:
 print(pyinverter.templatedInverse(np.eye(2)))
