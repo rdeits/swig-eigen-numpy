@@ -10,6 +10,7 @@ This package exists as a demonstration of some of the tools I've been playing wi
 * Passing numpy arrays to and from C++ methods which accept and return Eigen Matrix types
 * Adding additional Python-defined methods to a C++ class
 * Calling templated C++ functions from Python.
+* Calling C++ methods which take Eigen::Ref arguments from Python
 * Support for Python 2.7 and Python 3.4
 
 To show this off, I've written a C++ function which uses Eigen's LU module to invert matrices. This is a trivially simple example, but hopefully it will make someone's life a little easier down the road.

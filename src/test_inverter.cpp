@@ -9,8 +9,13 @@ int main(int argc, char** argv) {
   matrices.push_back(mat);
 
   Inverter inv;
+  std::cout << "testing inverse:" << std::endl;
   std::cout << inv.getInverse(mat) << std::endl;
 
+  std::cout << "testing list:" << std::endl;
   std::vector<Eigen::MatrixXd> results = inv.getInverseList(matrices);
   std::cout << results[0] << std::endl;
+
+  std::cout << "testing ref:" << std::endl;
+  std::cout << inv.getInverseRef(mat.block(0,0,1,1)) << std::endl;
 }

@@ -17,3 +17,8 @@ std::vector<Eigen::MatrixXd> Inverter::getInverseList(std::vector<Eigen::MatrixX
   }
   return result;
 }
+
+Eigen::MatrixXd Inverter::getInverseRef(const Eigen::Ref<const Eigen::MatrixXd> & M) {
+  return M.inverse();
+}
+

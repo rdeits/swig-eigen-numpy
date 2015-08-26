@@ -9,6 +9,7 @@ public:
 
   Eigen::MatrixXd getInverse(const Eigen::MatrixXd &M);
   Eigen::MatrixXd getInverse(const Eigen::MatrixXd &M, double offset);
+  Eigen::MatrixXd getInverseRef(const Eigen::Ref<const Eigen::MatrixXd> & M);
 
   std::vector<Eigen::MatrixXd > getInverseList(std::vector<Eigen::MatrixXd > matrices);
 };

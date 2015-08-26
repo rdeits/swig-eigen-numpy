@@ -33,3 +33,6 @@ print(invs[1])
 
 # templatedInverse is a templated function in C++, but we imported the explicit instantiation which acts on doubles:
 print(pyinverter.templatedInverse(np.eye(2)))
+
+# getInverseRef uses an Eigen Ref<MatrixXd> type as its input to support operations on Matrices, expressions, and blocks. But we can call it from Python just like any other method:
+print(inv.getInverseRef(4.0 * np.eye(4)))
