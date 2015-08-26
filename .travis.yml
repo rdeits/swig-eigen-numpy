@@ -24,6 +24,7 @@ python:
 
 before_install:
   - sudo apt-get update -qq
+  - sudo apt-get install cmake swig
   - ./install_eigen.sh
   - swig -version
   - mkdir build
