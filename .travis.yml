@@ -1,6 +1,7 @@
 language: python
 
-sudo: false
+# We need sudo to install a newer version of Eigen than the one supplied with Ubuntu 12.04
+sudo: required
 
 notifications:
   email: false
@@ -9,19 +10,21 @@ branches:
   only:
     - master
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - cmake
-      - libeigen3-dev
-      - swig
+# addons:
+#   apt:
+#     sources:
+#       - ubuntu-toolchain-r-test
+#     packages:
+#       - cmake
+#       - libeigen3-dev
+#       - swig
 
-python: 
+python:
   - '2.7'
 
 before_install:
+  - sudo apt-get update -qq
+  - ./install_eigen.sh
   - swig -version
   - mkdir build
   - cd build
