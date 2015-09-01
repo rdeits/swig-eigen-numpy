@@ -31,3 +31,12 @@
 // Create a specific instantiation of the templatedInverse function for arguments of type double, and call it templatedInverse_d. We'll import templatedInverse_d in pyinverter/pyinverter.py. 
 %template(templatedInverse_d) templatedInverse<double>;
 
+// Add a python snippet to the generated file. This snippet makes
+// extensions.InverterExtension (a python class we defined in
+// pyinverter/extensions.py) an extra parent class of the wrapped Inverter
+// class. That lets us define additional python-only methods that can act on
+// the Inverter object.
+%pythoncode %{
+import extensions
+Inverter.__bases__+= (extensions.InverterExtension,)
+%}
