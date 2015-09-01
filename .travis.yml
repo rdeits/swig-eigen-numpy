@@ -10,6 +10,7 @@ branches:
   only:
     - master
 
+# TODO: restore these someday when Travis gives us a newer version of eigen
 # addons:
 #   apt:
 #     sources:
