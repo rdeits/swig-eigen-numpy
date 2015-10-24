@@ -84,7 +84,7 @@
   int n;
   int ndim = PyArray_NDIM(value_array);
   if (PyArray_NDIM(derivatives_array) != ndim) {
-    std::cout << "dimensions of value and derivatives[0] must match" << std::endl;
+    std::cout << "ndim of value and derivatives[0] must match" << std::endl;
     SWIG_fail;
   }
   for (int i=0; i < ndim; i++) {
@@ -125,7 +125,7 @@
         derivatives(k) = *((double*) PyArray_GETPTR1(d, k));
       }
       res(i,j) = Eigen::AutoDiffScalar<Eigen::VectorXd>(*v, derivatives);
-      std::cout << "i: " << i << " j: " << j << " v: " << *v << " res(i,j): " << res(i,j).value() << std::endl;
+      // std::cout << "i: " << i << " j: " << j << " v: " << *v << " res(i,j): " << res(i,j).value() << std::endl;
     }
   }
 
