@@ -17,18 +17,6 @@
 // %eigen_typemaps(Eigen::MatrixXd)
 // %eigen_typemaps(Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>)
 
-
-%typemap(typecheck, precedence=2200) Eigen::AutoDiffScalar<Eigen::VectorXd> {
-  std::cout << "running autodiff vector typecheck" << std::endl;
-  if (!PyObject_HasAttrString($input, "value")) {
-    $1 = 0;
-  } else if (!PyObject_HasAttrString($input, "derivatives")) {
-    $1 = 0;
-  } else {
-    $1 = 1;
-  }
-}
-
 %typemap(typecheck, precedence=2100) Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::Matrix<double, Eigen::Dynamic, 1> >, Eigen::Dynamic, Eigen::Dynamic> {
   std::cout << "running autodiff vector typecheck" << std::endl;
   if (!PyObject_HasAttrString($input, "value")) {
@@ -39,21 +27,6 @@
     $1 = 1;
   }
 }
-// %typemap(typecheck, precedence=2000) Eigen::AutoDiffScalar<Eigen::VectorXd> {
-//   std::cout << "running autodiff typecheck" << std::endl;
-//   if (!PyObject_HasAttrString($input, "x")) {
-//     $1 = 0;
-//   } else if (!PyObject_HasAttrString($input, "d")) {
-//     $1 = 0;
-//   } else {
-//     $1 = 1;
-//   }
-// }
-
-// %fragment("AutoDiff_Fragments", "header", fragment="NumPy_Fragments") %{
-//   void ConvertFromTaylorToAutoDiff(PyObject* in, Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::Matrix<double, Eigen::Dynamic, 1> >, Eigen::Dynamic, Eigen::Dynamic>* out) {
-
-
 
 %typemap(in, fragment="Eigen_Fragments") Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, Eigen::Dynamic> {
   std::cout << "running autodiff vector input typemap" << std::endl;
@@ -138,16 +111,6 @@
   }
 }
 
-%typemap(in) Eigen::AutoDiffScalar<Eigen::VectorXd> {
-  std::cout << "running autodiff input typemap" << std::endl;
-  PyObject* keys = PyObject_CallMethod(PyObject_CallMethod($input, "d", ""), "keys", "");
-  Eigen::VectorXd derivatives(PyObject_Length(keys));
-  for (size_t i=0; i < derivatives.size(); i++) {
-    derivatives(i) = PyFloat_AsDouble(PyObject_CallMethodObjArgs($input, PyString_FromString("d"), PySequence_GetItem(keys, i), NULL));
-  }
-  $1 = Eigen::AutoDiffScalar<Eigen::VectorXd>(PyFloat_AsDouble(PyObject_GetAttrString($input, "x")), derivatives);
-}
-
 %typemap(out, fragment="Eigen_Fragments") Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, Eigen::Dynamic> {
   std::cout << "running autodiff vector output map" << std::endl;
   size_t m = $1.rows();
@@ -209,29 +172,6 @@
     PyTuple_SetItem(py_derivatives, i, PyFloat_FromDouble($1.derivatives()(i)));
   }
   PyTuple_SetItem($result, 1, py_derivatives);
-  // $result = PyObject_CallMethodObjArgs(ad_mod, PyString_FromString("adnumber"), , NULL);
-  // std::cout << "found autodiff keys: " << _swig_wrapper_autodiff_keys << std::endl;
 }
-
-// %pythonprepend square(Eigen::AutoDiffScalar<Eigen::VectorXd>) %{
-// print "in python, before square"
-// _swig_wrapper_autodiff_keys = x.d().keys()
-// _swig_wrapper_autodiff_keys.sort(key=lambda x: id(x))
-// print "saving autodiff keys:", _swig_wrapper_autodiff_keys
-// %}
-
-// %pythonappend square(Eigen::AutoDiffScalar<Eigen::VectorXd>) %{
-// print "in python, after square"
-// keys = args[0].d().keys()
-// print "looking up autodiff keys:", keys
-// temp_ad = ad.adnumber(val[0])
-// temp_ad._lc = dict(((key, val[1][i]) for i, key in enumerate(keys)))
-// val = temp_ad
-// %}
-
-
-// double square(double x);
-// Eigen::AutoDiffScalar<Eigen::VectorXd> square(Eigen::AutoDiffScalar<Eigen::VectorXd>);
-// Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, Eigen::Dynamic> squareVector(Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, Eigen::Dynamic> );
 
 %include "square.hpp"
