@@ -3,8 +3,7 @@ import pyad.autodiff
 import numpy as np
 from taylor import TaylorVar
 
-t = TaylorVar(np.array([1,2,3]))
-print t.derivatives[0][0].dtype
+t = TaylorVar(np.array([[1,2,3]]).T)
 t2 = pyad.autodiff.squareVector(t)
 print t2
 print t2.value
@@ -22,14 +21,19 @@ t4 = pyad.autodiff.squareVector(t3)
 print t4.value, t4.derivatives
 
 y2 = t4.to_adnumber([t])
-print y2[0,0].x
-print y2[0,0].d(t)
+print y2[0].x
+print y2[0].d(t)
 
 y3 = adnumber(np.array([1,2,3]))
 t5 = TaylorVar.from_adnumber(y3, y3)
 t6 = pyad.autodiff.squareVector(t5)
 y4 = t6.to_adnumber(y3)
-print y4[1,0].d(y3[1])
+print y4[1].d(y3[1])
+
+t = TaylorVar(np.array([1,2,3]))
+t2 = pyad.autodiff.squareVector(t)
+print t
+print t2
 
 # x = 2 * y
 # x2 = pyad.autodiff.square(x)
