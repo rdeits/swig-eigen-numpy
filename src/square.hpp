@@ -1,7 +1,7 @@
 #include <Eigen/Core>
 #include <unsupported/Eigen/AutoDiff>
 
-template <typename Scalar>
-Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> squareVector(Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> x) {
+template <typename Scalar, int ColsAtCompileTime>
+Eigen::Matrix<Scalar, Eigen::Dynamic, ColsAtCompileTime> squareVector(Eigen::Matrix<Scalar, Eigen::Dynamic, ColsAtCompileTime> x) {
   return x.array() * x.array();
 }
