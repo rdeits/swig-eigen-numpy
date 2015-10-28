@@ -15,7 +15,7 @@ add_swig_python_module(TARGET inverter_wrapper
 
 add_swig_python_module(TARGET autodiff
                        CPLUSPLUS
-                       SWIG_I_FILE ${CMAKE_CURRENT_SOURCE_DIR}/autodiff.i
+                       SWIG_I_FILE ${CMAKE_CURRENT_SOURCE_DIR}/autodiff_wrapper.i
                        INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../src
                        SWIG_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../swigmake/swig/python
                        DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyad)

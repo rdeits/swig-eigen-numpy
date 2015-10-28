@@ -1,16 +1,14 @@
-%module(package="pyad") autodiff
 
 %{
 #ifdef SWIGPYTHON
   #define SWIG_FILE_WITH_INIT
   #include <Python.h>
 #endif
-#include "square.hpp"
 #include <unsupported/Eigen/AutoDiff>
 #include <iostream>
 %}
 
-%include <eigen.i>
+%include "eigen.i"
 
 %fragment("AutoDiff_Fragments", "header", fragment="Eigen_Fragments") 
 %{
@@ -179,38 +177,18 @@
   }
 %}
 
+%define %autodiff_typemaps(Precedence, ColsAtCompileTime, DerType)
 
-
-// %eigen_typemaps(Eigen::VectorXd)
-// %eigen_typemaps(Eigen::MatrixXd)
-// %eigen_typemaps(Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>)
-
-
-%define %autodiff_typemaps(DerType...)
-
-%typemap(in, fragment="AutoDiff_Fragments") Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, Eigen::Dynamic, Eigen::Dynamic> {
+%typemap(in, fragment="AutoDiff_Fragments") Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, Eigen::Dynamic, ColsAtCompileTime> {
   std::cout << "running autodiff matrix input typemap" << std::endl;
-  if (!ConvertFromTaylorVarToAutoDiffMatrix<DerType, Eigen::Dynamic>($input, &$1)){
+  if (!ConvertFromTaylorVarToAutoDiffMatrix<DerType, ColsAtCompileTime>($input, &$1)){
     SWIG_fail;
   }
 }
 
-%typemap(in, fragment="AutoDiff_Fragments") Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, Eigen::Dynamic, 1> {
-  std::cout << "running autodiff vector input typemap" << std::endl;
-  if (!ConvertFromTaylorVarToAutoDiffMatrix<DerType, 1>($input, &$1)){
-    SWIG_fail;
-  }
-}
-
-%typecheck(2200, fragment="AutoDiff_Fragments") 
-  Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, Eigen::Dynamic, Eigen::Dynamic> {
-  std::cout << "running autodiff matrix typecheck" << std::endl;
-  $1 = PyObject_obeys_taylorvar_interface($input);
-}
-
-%typecheck(2100, fragment="AutoDiff_Fragments") 
-  Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, Eigen::Dynamic, 1> {
-  std::cout << "running autodiff vector typecheck" << std::endl;
+%typecheck(Precedence, fragment="AutoDiff_Fragments") 
+  Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, Eigen::Dynamic, ColsAtCompileTime> {
+  std::cout << "running autodiff ColsAtCompileTime typecheck" << std::endl;
 
   if (!PyObject_obeys_taylorvar_interface($input)) {
     std::cout << "does not obey taylorvar interface" << std::endl;
@@ -222,7 +200,16 @@
       std::cout << "no value_array" << std::endl;
       $1 = 0;
     } else {
-      $1 = (PyArray_NDIM(value_array) == 1 || (PyArray_NDIM(value_array) == 2 && PyArray_DIM(value_array, 2) == 1));
+      if (ColsAtCompileTime == -1) {
+        $1 = (PyArray_NDIM(value_array) == 2);
+      } else if (ColsAtCompileTime == 1) {
+        $1 = (PyArray_NDIM(value_array) == 1);
+      } else {
+        $1 = (PyArray_NDIM(value_array) == 2) && (PyArray_DIM(value_array, 2) == ColsAtCompileTime);
+      }
+
+      // $1 = (PyArray_NDIM(value_array) == 1 && 
+      // $1 = (PyArray_NDIM(value_array) == 1 || (PyArray_NDIM(value_array) == 2 && PyArray_DIM(value_array, 2) == 1));
       std::cout << "ndim: " << PyArray_NDIM(value_array) << std::endl;
     }
     Py_DECREF(value);
@@ -230,24 +217,12 @@
 }
 
 
-%typemap(out, fragment="Eigen_Fragments") Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, Eigen::Dynamic, Eigen::Dynamic> {
+%typemap(out, fragment="AutoDiff_Fragments") Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, Eigen::Dynamic, ColsAtCompileTime> {
   std::cout << "running autodiff matrix output map" << std::endl;
-  if (!ConvertFromAutoDiffMatrixToTaylorVar<DerType, Eigen::Dynamic>(&$1, &$result)) {
-    SWIG_fail;
-  }
-}
-
-%typemap(out, fragment="Eigen_Fragments") Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, Eigen::Dynamic, 1> {
-  std::cout << "running autodiff vector output map" << std::endl;
-  if (!ConvertFromAutoDiffMatrixToTaylorVar<DerType, 1>(&$1, &$result)) {
+  if (!ConvertFromAutoDiffMatrixToTaylorVar<DerType, ColsAtCompileTime>(&$1, &$result)) {
     SWIG_fail;
   }
 }
 
 %enddef
 
-%autodiff_typemaps(Eigen::VectorXd)
-
-%include "square.hpp"
-Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, Eigen::Dynamic> squareVector(Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, Eigen::Dynamic> x);
-Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, 1> squareVector(Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, 1> x);
