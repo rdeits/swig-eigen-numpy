@@ -4,6 +4,7 @@ import pyad.autodiff
 
 x = pyad.autodiff.newAutoDiff(np.array([1.0, 3.0]), np.array([2.0, 5.0]))
 print x.value()
+print x
 assert (x.value() == np.array([[1.0, 3.0]]).T).all()
 assert (x.derivatives() == np.array([[2.0, 5.0]]).T).all()
 
