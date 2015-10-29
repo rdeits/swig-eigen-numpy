@@ -13,7 +13,9 @@
 %include <eigen.i>
 
 %eigen_typemaps(Eigen::VectorXd)
+%eigen_typemaps(Eigen::Matrix<double, Eigen::Dynamic, 1>)
 %eigen_typemaps(Eigen::MatrixXd)
+%eigen_typemaps(Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>)
 
 %import <Eigen/Core>
 %import <unsupported/Eigen/src/AutoDiff>
@@ -21,26 +23,30 @@
 
 %inline %{
 
-class AutoDiffVectorDynamic: public Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, 1> {
+template <typename DerType, int RowsAtCompileTime, int ColsAtCompileTime>
+class AutoDiffWrapper: public Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, RowsAtCompileTime, ColsAtCompileTime> {
+
+  typedef Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, RowsAtCompileTime, ColsAtCompileTime> BaseMatrix;
 
 public:
-  AutoDiffVectorDynamic() {}
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime>() {}
 
-  AutoDiffVectorDynamic(const Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, 1>& x): Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, 1>(x) {};
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime>(const Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, RowsAtCompileTime, ColsAtCompileTime>& x): Eigen::Matrix<Eigen::AutoDiffScalar<DerType>, RowsAtCompileTime, ColsAtCompileTime>(x) {};
 
-  AutoDiffVectorDynamic(Eigen::VectorXd value, Eigen::MatrixXd derivatives) {
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime>(const Eigen::Matrix<double, RowsAtCompileTime, ColsAtCompileTime> &value, const Eigen::MatrixXd &derivatives) {
     this->resize(value.rows(), value.cols());
-    for (size_t i=0; i < value.size(); i++) {
-      this->coeffRef(i) = Eigen::AutoDiffScalar<Eigen::VectorXd>(value(i), derivatives.row(i));
-      std::cout << "setting derivatives for index: " << i << " to: " << derivatives.row(i) << std::endl;
+    if (derivatives.rows() != value.size()) {
+      throw std::runtime_error("derivatives must have one row for every element in value");
     }
-    // Eigen::VectorXd der_vector(derivatives.cols());
-    // der_vector(0) = derivatives;
-    // this->coeffRef(0) = Eigen::AutoDiffScalar<Eigen::VectorXd>(value, der_vector);
+    for (size_t i=0; i < value.rows(); i++) {
+      for (size_t j=0; j < value.cols(); j++) {
+        this->coeffRef(i, j) = Eigen::AutoDiffScalar<Eigen::VectorXd>(value(i,j), derivatives.row(i + value.rows() * j));
+      }
+    }
   }
 
-  Eigen::VectorXd value() {
-    Eigen::VectorXd result(this->size());
+  Eigen::Matrix<double, RowsAtCompileTime, ColsAtCompileTime> value() {
+    Eigen::Matrix<double, RowsAtCompileTime, ColsAtCompileTime> result(this->rows(), this->cols());
     for (size_t i=0; i < this->size(); i++) {
       result(i) = this->coeffRef(i).value();
     }
@@ -58,11 +64,33 @@ public:
       }
     }
     return result;
+  }
 
-    // return this->coeffRef(0).derivatives()(0);
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator+ (const AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime>& other) {
+    return BaseMatrix::operator+(other).eval();
+  }
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator- (const AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime>& other) {
+    return BaseMatrix::operator-(other).eval();
+  }
+
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator+ (double other) {
+    return BaseMatrix::operator+(other).eval();
+  }
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator- (double other) {
+    return BaseMatrix::operator-(other).eval();
+  }
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator* (double other) {
+    return BaseMatrix::operator*(other).eval();
+  }
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator/ (double other) {
+    return BaseMatrix::operator/(other).eval();
   }
 };
+
 %}
+
+%template(AutoDiffVectorDynamic) AutoDiffWrapper<Eigen::VectorXd, Eigen::Dynamic, 1>;
+%template(AutoDiffMatrixDynamic) AutoDiffWrapper<Eigen::VectorXd, Eigen::Dynamic, Eigen::Dynamic>;
 
 // %inline %{
 // class AutoDiffVectorDynamic {
@@ -107,7 +135,7 @@ public:
 %include "square.hpp"
 // %rename(squareVector) squareVector<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic>;
 
-AutoDiffVectorDynamic squareVector(AutoDiffVectorDynamic);
+AutoDiffWrapper<Eigen::VectorXd, Eigen::Dynamic, 1> squareVector(AutoDiffWrapper<Eigen::VectorXd, Eigen::Dynamic, 1>);
 // Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, Eigen::Dynamic> squareVector(Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, Eigen::Dynamic> x);
 // Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, 1> squareVector(Eigen::Matrix<Eigen::AutoDiffScalar<Eigen::VectorXd>, Eigen::Dynamic, 1> x);
 
