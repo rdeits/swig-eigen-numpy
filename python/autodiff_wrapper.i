@@ -72,12 +72,18 @@ public:
   AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator- (const AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime>& other) {
     return BaseMatrix::operator-(other).eval();
   }
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> arrayMultiply (const AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime>& other) {
+    return this->array().operator*(other.array()).matrix().eval();
+  }
+  AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> arrayDivide (const AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime>& other) {
+    return this->array().operator/(other.array()).matrix().eval();
+  }
 
   AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator+ (double other) {
-    return BaseMatrix::operator+(other).eval();
+    return this->array().operator+(other).matrix().eval();
   }
   AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator- (double other) {
-    return BaseMatrix::operator-(other).eval();
+    return this->array().operator-(other).matrix().eval();
   }
   AutoDiffWrapper<DerType, RowsAtCompileTime, ColsAtCompileTime> operator* (double other) {
     return BaseMatrix::operator*(other).eval();
