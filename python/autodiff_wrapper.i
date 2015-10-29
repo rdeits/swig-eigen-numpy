@@ -23,7 +23,7 @@ import numpy as np
 def newAutoDiff(value, derivatives=None):
     value = np.asarray(value)
     if derivatives is None:
-        derivatives = np.eye((value.size, value.size))
+        derivatives = np.eye(value.size, value.size)
     else:
         derivatives = np.asarray(derivatives)
         if derivatives.ndim < 2:
