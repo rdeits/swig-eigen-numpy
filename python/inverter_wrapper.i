@@ -45,6 +45,6 @@
 // class. That lets us define additional python-only methods that can act on
 // the Inverter object.
 %pythoncode %{
-import extensions
-Inverter.__bases__+= (extensions.InverterExtension,)
+from .extensions import InverterExtension
+Inverter.__bases__+= (InverterExtension,)
 %}
