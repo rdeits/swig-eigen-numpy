@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:rdeits/swigmake.git
+	branch = master
+	commit = 289ed6cbfdaa031a9d0eca328b13f6b51fd4349f
+	parent = c2874b8475285e4509b1eefc2f1efef6a3cb0f49
+	cmdver = 0.3.0
