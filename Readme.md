@@ -11,7 +11,7 @@ This package exists as a demonstration of some of the tools I've been playing wi
 * Adding additional Python-defined methods to a C++ class
 * Calling templated C++ functions from Python.
 * Calling C++ methods which take Eigen::Ref arguments from Python
-* Support for Python 2.7 and Python 3.4
+* Support for Python 2.7 and Python 3
 
 To show this off, I've written a C++ function which uses Eigen's LU module to invert matrices. This is a trivially simple example, but hopefully it will make someone's life a little easier down the road.
 
@@ -20,11 +20,12 @@ To show this off, I've written a C++ function which uses Eigen's LU module to in
 You'll need, at the very least:
 
 * cmake
-* eigen3
 * swig
 * a c/c++ compiler for your system
 
-On OSX, you can follow the instructions from Homebrew to [install a compiler](https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md#requirements) and use [Homebrew](http://brew.sh/) to install the `cmake swig eigen` packages. On Ubuntu, you can `sudo apt-get install libeigen3-dev cmake swig`.
+On OSX, you can follow the instructions from Homebrew to [install a compiler](https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Installation.md#requirements) and use [Homebrew](http://brew.sh/) to install the `cmake swig` packages. On Ubuntu, you can `sudo apt-get install cmake swig`.
+
+If you don't have a copy of `eigen3` installed, one will be automatically downloaded and built for you. If you don't want that, just install the `eigen3` package yourself. In Homebrew it's called `eigen` and in `apt-get` it's called `libeigen3-dev`. 
 
 ## Building
 

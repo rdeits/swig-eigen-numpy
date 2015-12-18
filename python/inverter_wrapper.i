@@ -39,12 +39,11 @@
 // templatedInverse_d in pyinverter/pyinverter.py.
 %template(templatedInverse_d) templatedInverse<double>;
 
-// Add a python snippet to the generated file. This snippet makes
-// extensions.InverterExtension (a python class we defined in
-// pyinverter/extensions.py) an extra parent class of the wrapped Inverter
-// class. That lets us define additional python-only methods that can act on
-// the Inverter object.
+// Add a python snippet to the generated file. This snippet attaches the
+// Inverter_getInversePlus1 function from extensions.py as a new method of
+// Inverter. That lets us define additional python-only methods that can act
+// on the Inverter object.
 %pythoncode %{
-import extensions
-Inverter.__bases__+= (extensions.InverterExtension,)
+from .extensions import Inverter_getInversePlus1
+Inverter.getInversePlus1 = Inverter_getInversePlus1
 %}
