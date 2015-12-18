@@ -1,4 +1,4 @@
-# This file demonstrates one way to add python-only methods to a wrapped C++ class. We define a new class called InverterExtension, which contains the python methods we would like to add. Then in inverter_wrapper.i we add the following python code:
+# This file demonstrates one way to add python-only methods to a wrapped C++ class. We define a new method called Inverter_getInversePlus1. Then in inverter_wrapper.i we add the following python code:
 #
 #   %pythoncode %{
 #   import extensions
@@ -9,10 +9,9 @@
 
 import numpy as np
 
-class InverterExtension:
-    def getInversePlus1(self, M):
-        """
-        Invert the matrix and add one to every element
-        """
-        inv = self.getInverse(M)
-        return inv + np.ones(M.shape)
+def Inverter_getInversePlus1(self, M):
+    """
+    Invert the matrix and add one to every element
+    """
+    inv = self.getInverse(M)
+    return inv + np.ones(M.shape)
