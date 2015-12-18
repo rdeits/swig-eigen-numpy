@@ -46,5 +46,5 @@
 // the Inverter object.
 %pythoncode %{
 from .extensions import InverterExtension
-Inverter.__bases__+= (InverterExtension,)
+Inverter.__bases__ = (InverterExtension,) + Inverter.__bases__
 %}
