@@ -16,7 +16,6 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - cmake
-      - libeigen3-dev
       - swig
 
 python:
