@@ -11,7 +11,7 @@ m = np.array([[2.0, 0.0],
 # Call a C++ method with a Numpy array.
 print(inv.getInverse(m))
 
-# We defined getInversePlus1 in python in pyinverter/pyinverter.py. But we attached it to the Inverter class, so we can call it just like a C++ method:
+# We defined getInversePlus1 in python in pyinverter/extensions.py. But we attached it to the Inverter class, so we can call it just like a C++ method:
 print(inv.getInversePlus1(m))
 
 # Calling a function without passing a numpy array should raise a helpful error:
