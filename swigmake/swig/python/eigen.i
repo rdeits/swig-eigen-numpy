@@ -63,27 +63,9 @@
   {
     int rows = 0;
     int cols = 0;
-    // Check object type
-    if (!is_array(in))
+    if ( (is_array(in) && array_numdims(in) == 1) || PySequence_Check(in))
     {
-      PyErr_SetString(PyExc_ValueError, "The given input is not known as a NumPy array or matrix.");
-      return false;
-    }
-    // Check data type
-    else if (array_type(in) != NumPyType<typename Derived::Scalar>())
-    {
-      PyErr_SetString(PyExc_ValueError, "Type mismatch between NumPy and Eigen objects.");
-      return false;
-    }
-    // Check dimensions
-    else if (array_numdims(in) > 2)
-    {
-      PyErr_SetString(PyExc_ValueError, "Eigen only support 1D or 2D array.");
-      return false;
-    }
-    else if (array_numdims(in) == 1)
-    {
-      rows = array_size(in,0);
+      rows = is_array(in) ? array_size(in,0) : PySequence_Length(in);
       cols = 1;
       if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != rows))
       {
@@ -113,7 +95,12 @@
     }
     // Extract data
     int isNewObject = 0;
-    PyArrayObject* temp = obj_to_array_contiguous_allow_conversion(in, array_type(in), &isNewObject);
+    PyArrayObject* temp;
+    if( is_array(in) ) {
+      temp = obj_to_array_contiguous_allow_conversion(in, array_type(in), &isNewObject);
+    } else {
+      temp = obj_to_array_contiguous_allow_conversion(in, PyArray_ObjectType(PySequence_GetItem(in, 0), 0), &isNewObject);
+    }
     if (temp == NULL)
     {
       PyErr_SetString(PyExc_ValueError, "Impossible to convert the input into a Python array object.");
@@ -214,7 +201,9 @@
   };
 
   template<> int NumPyType<double>() {return NPY_DOUBLE;};
+  template<> int NumPyType<float>() {return NPY_FLOAT;};
   template<> int NumPyType<int>() {return NPY_INT;};
+  template<> int NumPyType<bool>() {return NPY_BOOL;};
 %}
 
 // ----------------------------------------------------------------------------
@@ -349,7 +338,16 @@
     const Eigen::MatrixBase< CLASS > &,
     CLASS &
   {
-    $1 = is_array($input);
+    int numtype = NumPyType<typename CLASS::Scalar>();
+    
+    if( is_array($input) && array_type($input) == numtype && array_numdims($input) <= 2 )
+      $1 = 1;
+    else if (PySequence_Check($input) && PyArray_ObjectType(PySequence_GetItem($input, 0), 0) == numtype && !PySequence_Check(PySequence_GetItem($input, 0)))
+      $1 = 1;
+    else {
+      PyErr_SetString(PyExc_ValueError, "Type mismatch between Array and Eigen objects.");
+      $1 = 0;
+    }
   }
 
 %typecheck(SWIG_TYPECHECK_DOUBLE_ARRAY)
